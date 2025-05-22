@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class FormBuilderCupertinoTextField extends FormBuilderField<String> {
+  final BuildContext context;
+
   /// Controls the text being edited.
   ///
   /// If null, this widget will create its own [TextEditingController].
@@ -279,7 +281,8 @@ class FormBuilderCupertinoTextField extends FormBuilderField<String> {
   /// [CupertinoColors.destructiveRed] coloring and medium-weighted font. The
   /// row becomes taller in order to display the [helper] widget underneath
   /// [prefix] and [child]. If null, the row is shorter.
-  final Widget? Function(String error)? errorBuilder;
+  @override
+  final FormFieldErrorBuilder? errorBuilder;
 
   /// {@macro flutter.widgets.editableText.scribbleEnabled}
   final bool scribbleEnabled;
@@ -339,6 +342,7 @@ class FormBuilderCupertinoTextField extends FormBuilderField<String> {
     super.onReset,
     super.focusNode,
     super.restorationId,
+    required this.context,
     this.readOnly = false,
     this.maxLines = 1,
     this.obscureText = false,
@@ -400,8 +404,7 @@ class FormBuilderCupertinoTextField extends FormBuilderField<String> {
       'This feature was deprecated after v3.27.0-0.2.pre.',
     )
     this.scribbleEnabled = true,
-    this.stylusHandwritingEnabled =
-        EditableText.defaultStylusHandwritingEnabled,
+    this.stylusHandwritingEnabled = EditableText.defaultStylusHandwritingEnabled,
     this.clearButtonMode = OverlayVisibilityMode.never,
     this.contentInsertionConfiguration,
     this.placeholder,
@@ -416,10 +419,7 @@ class FormBuilderCupertinoTextField extends FormBuilderField<String> {
          !expands || (maxLines == null && minLines == null),
          'minLines and maxLines must be null when expands is true.',
        ),
-       assert(
-         !obscureText || maxLines == 1,
-         'Obscured fields cannot be multiline.',
-       ),
+       assert(!obscureText || maxLines == 1, 'Obscured fields cannot be multiline.'),
        assert(maxLength == null || maxLength > 0),
        // Assert the following instead of setting it directly to avoid surprising the user by silently changing the value they set.
        assert(
@@ -499,38 +499,27 @@ class FormBuilderCupertinoTextField extends FormBuilderField<String> {
              error:
                  state.hasError
                      ? errorBuilder != null
-                         ? errorBuilder(state.errorText ?? '')
+                         ? errorBuilder(context, state.errorText ?? '')
                          : Text(state.errorText ?? '')
                      : null,
              helper: helper,
              padding: contentPadding,
              prefix: prefix,
-             child:
-                 shouldExpandedField
-                     ? SizedBox(width: double.infinity, child: fieldWidget)
-                     : fieldWidget,
+             child: shouldExpandedField ? SizedBox(width: double.infinity, child: fieldWidget) : fieldWidget,
            );
          },
        );
 
-  static Widget _defaultContextMenuBuilder(
-    BuildContext context,
-    EditableTextState editableTextState,
-  ) {
-    return CupertinoAdaptiveTextSelectionToolbar.editableText(
-      editableTextState: editableTextState,
-    );
+  static Widget _defaultContextMenuBuilder(BuildContext context, EditableTextState editableTextState) {
+    return CupertinoAdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
   }
 
   @override
-  FormBuilderFieldState<FormBuilderCupertinoTextField, String> createState() =>
-      _FormBuilderCupertinoTextFieldState();
+  FormBuilderFieldState<FormBuilderCupertinoTextField, String> createState() => _FormBuilderCupertinoTextFieldState();
 }
 
-class _FormBuilderCupertinoTextFieldState
-    extends FormBuilderFieldState<FormBuilderCupertinoTextField, String> {
-  TextEditingController? get _effectiveController =>
-      widget.controller ?? _controller;
+class _FormBuilderCupertinoTextFieldState extends FormBuilderFieldState<FormBuilderCupertinoTextField, String> {
+  TextEditingController? get _effectiveController => widget.controller ?? _controller;
 
   TextEditingController? _controller;
 

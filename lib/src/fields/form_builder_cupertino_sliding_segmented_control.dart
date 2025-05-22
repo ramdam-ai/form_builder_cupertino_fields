@@ -5,6 +5,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 /// Field with iOS-style segmented control bar using `CupertinoSlidingSegmentedControl`
 class FormBuilderCupertinoSlidingSegmentedControl<T extends Object>
     extends FormBuilderField<T> {
+  final BuildContext context;
+
   /// The color used to fill the background of the selected widget and as the text
   /// color of unselected widgets.
   ///
@@ -60,7 +62,8 @@ class FormBuilderCupertinoSlidingSegmentedControl<T extends Object>
   /// [CupertinoColors.destructiveRed] coloring and medium-weighted font. The
   /// row becomes taller in order to display the [helper] widget underneath
   /// [prefix] and [child]. If null, the row is shorter.
-  final Widget? Function(String error)? errorBuilder;
+  @override
+  final FormFieldErrorBuilder? errorBuilder;
 
   /// Creates field for selection of a value from the `CupertinoSegmentedControl`
   FormBuilderCupertinoSlidingSegmentedControl({
@@ -77,6 +80,7 @@ class FormBuilderCupertinoSlidingSegmentedControl<T extends Object>
     super.focusNode,
     super.restorationId,
     required this.options,
+    required this.context,
     this.backgroundColor,
     this.thumbColor,
     this.padding,
@@ -111,7 +115,7 @@ class FormBuilderCupertinoSlidingSegmentedControl<T extends Object>
              error:
                  state.hasError
                      ? errorBuilder != null
-                         ? errorBuilder(state.errorText ?? '')
+                         ? errorBuilder(context, state.errorText ?? '')
                          : Text(state.errorText ?? '')
                      : null,
              helper: helper,

@@ -5,6 +5,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 /// Field for selection of a value from the `CupertinoSegmentedControl`
 class FormBuilderCupertinoSegmentedControl<T extends Object>
     extends FormBuilderField<T> {
+  final BuildContext context;
+
   /// The color used to fill the backgrounds of unselected widgets and as the
   /// text color of the selected widget.
   ///
@@ -71,7 +73,8 @@ class FormBuilderCupertinoSegmentedControl<T extends Object>
   /// [CupertinoColors.destructiveRed] coloring and medium-weighted font. The
   /// row becomes taller in order to display the [helper] widget underneath
   /// [prefix] and [child]. If null, the row is shorter.
-  final Widget? Function(String error)? errorBuilder;
+  @override
+  final FormFieldErrorBuilder? errorBuilder;
 
   /// Creates field for selection of a value from the `CupertinoSegmentedControl`
   FormBuilderCupertinoSegmentedControl({
@@ -88,6 +91,7 @@ class FormBuilderCupertinoSegmentedControl<T extends Object>
     super.focusNode,
     super.restorationId,
     required this.options,
+    required this.context,
     this.borderColor,
     this.selectedColor,
     this.pressedColor,
@@ -122,7 +126,7 @@ class FormBuilderCupertinoSegmentedControl<T extends Object>
              error:
                  state.hasError
                      ? errorBuilder != null
-                         ? errorBuilder(state.errorText ?? '')
+                         ? errorBuilder(context, state.errorText ?? '')
                          : Text(state.errorText ?? '')
                      : null,
              helper: helper,

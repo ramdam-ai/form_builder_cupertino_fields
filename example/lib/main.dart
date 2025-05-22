@@ -43,11 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               children: [
                 FormBuilderCupertinoCheckbox(
+                  context: context,
                   name: 'checkbox',
                   prefix: const Text('Select/Unselect'),
                 ),
                 const SizedBox(height: 16),
                 FormBuilderCupertinoSegmentedControl<int>(
+                  context: context,
                   name: 'segmented_control',
                   shouldExpandedField: true,
                   autovalidateMode: AutovalidateMode.always,
@@ -62,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 const SizedBox(height: 16),
                 FormBuilderCupertinoSlidingSegmentedControl<String>(
+                  context: context,
                   name: 'segmented_sliding_control',
                   options: const [
                     FormBuilderFieldOption(value: '1', child: Text('1')),
@@ -73,12 +76,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 const SizedBox(height: 16),
                 FormBuilderCupertinoSwitch(
+                  context: context,
                   name: 'switch',
                   initialValue: true,
                   prefix: const Text('Enable/Disabled'),
                 ),
                 const SizedBox(height: 16),
                 FormBuilderCupertinoSlider(
+                  context: context,
                   name: 'slider',
                   initialValue: 10,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -92,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 const SizedBox(height: 16),
                 FormBuilderCupertinoTextField(
+                  context: context,
                   name: 'text',
                   decoration: BoxDecoration(
                     border: Border.all(color: CupertinoColors.black),

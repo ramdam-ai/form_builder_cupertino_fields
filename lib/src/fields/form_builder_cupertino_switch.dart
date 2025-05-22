@@ -5,6 +5,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 /// On/Off Cupertino switch field
 class FormBuilderCupertinoSwitch extends FormBuilderField<bool> {
+  final BuildContext context;
+
   /// The color to use for the track when the switch is on.
   ///
   /// If null and [applyTheme] is false, defaults to [CupertinoColors.systemGreen]
@@ -294,7 +296,7 @@ class FormBuilderCupertinoSwitch extends FormBuilderField<bool> {
   /// [CupertinoColors.destructiveRed] coloring and medium-weighted font. The
   /// row becomes taller in order to display the [helper] widget underneath
   /// [prefix] and [child]. If null, the row is shorter.
-  final Widget? Function(String error)? errorBuilder;
+  final FormFieldErrorBuilder? errorBuilder;
 
   /// Creates On/Off Cupertino switch field
   FormBuilderCupertinoSwitch({
@@ -310,6 +312,7 @@ class FormBuilderCupertinoSwitch extends FormBuilderField<bool> {
     super.onReset,
     super.focusNode,
     super.restorationId,
+    required this.context,
     this.activeTrackColor,
     this.dragStartBehavior = DragStartBehavior.start,
     this.trackColor,
@@ -372,7 +375,7 @@ class FormBuilderCupertinoSwitch extends FormBuilderField<bool> {
              error:
                  state.hasError
                      ? errorBuilder != null
-                         ? errorBuilder(state.errorText ?? '')
+                         ? errorBuilder(context, state.errorText ?? '')
                          : Text(state.errorText ?? '')
                      : null,
              helper: helper,

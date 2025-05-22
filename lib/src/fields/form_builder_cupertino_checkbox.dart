@@ -8,6 +8,8 @@ class FormBuilderCupertinoCheckbox extends FormBuilderField<bool> {
   /// Defaults to [CupertinoColors.activeBlue].
   final Color? activeColor;
 
+  final BuildContext context;
+
   /// Defines whether the field input expands to fill the entire width
   /// of the row field.
   ///
@@ -43,7 +45,8 @@ class FormBuilderCupertinoCheckbox extends FormBuilderField<bool> {
   /// [CupertinoColors.destructiveRed] coloring and medium-weighted font. The
   /// row becomes taller in order to display the [helper] widget underneath
   /// [prefix] and [child]. If null, the row is shorter.
-  final Widget? Function(String error)? errorBuilder;
+  @override
+  final FormFieldErrorBuilder? errorBuilder;
 
   /// {@macro flutter.cupertino.CupertinoCheckbox.fillColor}
   ///
@@ -136,6 +139,7 @@ class FormBuilderCupertinoCheckbox extends FormBuilderField<bool> {
     super.onReset,
     super.focusNode,
     super.restorationId,
+    required this.context,
     this.activeColor,
     this.shouldExpandedField = false,
     this.errorBuilder,
@@ -179,24 +183,19 @@ class FormBuilderCupertinoCheckbox extends FormBuilderField<bool> {
              error:
                  state.hasError
                      ? errorBuilder != null
-                         ? errorBuilder(state.errorText ?? '')
+                         ? errorBuilder(context, state.errorText ?? '')
                          : Text(state.errorText ?? '')
                      : null,
              helper: helper,
              padding: contentPadding,
              prefix: prefix,
-             child:
-                 shouldExpandedField
-                     ? SizedBox(width: double.infinity, child: fieldWidget)
-                     : fieldWidget,
+             child: shouldExpandedField ? SizedBox(width: double.infinity, child: fieldWidget) : fieldWidget,
            );
          },
        );
 
   @override
-  FormBuilderFieldState<FormBuilderCupertinoCheckbox, bool> createState() =>
-      _FormBuilderCupertinoCheckboxState();
+  FormBuilderFieldState<FormBuilderCupertinoCheckbox, bool> createState() => _FormBuilderCupertinoCheckboxState();
 }
 
-class _FormBuilderCupertinoCheckboxState
-    extends FormBuilderFieldState<FormBuilderCupertinoCheckbox, bool> {}
+class _FormBuilderCupertinoCheckboxState extends FormBuilderFieldState<FormBuilderCupertinoCheckbox, bool> {}
